@@ -79,8 +79,6 @@ def run():
 
 
 def start():
-    logging.config.fileConfig(os.path.dirname(__file__) + '/logging.conf')
-
     server_instance = ws2s_server.new_instance(
         ws2s_config.get['listen']['port'],
         ws2s_config.get['listen']['host']
@@ -133,6 +131,9 @@ def main():
     command = sys.argv[1] if len(sys.argv) > 1 else 'help'
     if command == 'run':
         return run()
+
+    logging.config.fileConfig(os.path.dirname(__file__) + '/logging.conf')
+
     if command == 'start':
         return start()
     if command == 'stop':
