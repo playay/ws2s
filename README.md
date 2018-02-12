@@ -137,3 +137,8 @@ when "code" field > 0.
 ```
 
 
+todo
+====
+- auto-start on boot (ubuntu)
+- ws2s.js
+- fredis
