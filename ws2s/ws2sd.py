@@ -141,7 +141,7 @@ def main():
     if command == 'restart':
         return restart()
 
-    logger.info('\ncommands:\n'
+    logger.info('commands:\n'
                 + '    ws2sd help:    show this info. alias for "ws2sd" \n'
                   + '    ws2sd run:     run ws2s server in front\n'
                   + '    ws2sd start:   start ws2s server in background\n'
