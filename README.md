@@ -5,9 +5,9 @@ ws2s(websocket to socket) is a websocket server that handle socket(tcp)s.
 
 the simplest workflow might be like this:    
 
-first, a websocket client(we called "ws") ask ws2s_server to create a socket(we called "s") for it.    
-then, "ws" ask ws2s_server to use "s" to send data.    
-when "s" received data, ws2s_server will notify "ws" with the received data.    
+first, a websocket client(we called **`"ws"`**) ask ws2s_server to create a socket(we called **`"s"`**) for it.    
+then, **`"ws"`** ask ws2s_server to use **`"s"`** to send data.    
+when **`"s"`** received data, ws2s_server will notify **`"ws"`** with the received data.    
 
 with this workflow, javaScript running on a browser got the ability to use socket.    
 
@@ -15,35 +15,13 @@ with this workflow, javaScript running on a browser got the ability to use socke
 ws2s.js(upcoming)
 =================
 [ws2s-js](https://github.com/playlay/ws2s-js) is a javaScript websocket client wrapper that provide socket-like interface to communicate with ws2s_server.    
-based on the socketWrapper, other wrappers like redisWrapper will be provided. then an online redis client will be available at [fredis](https://feling.io/redis/).    
-
-
-install
-=======
-ws2s works on py2、py3、windows、linux、osx.    
-
-if you are using python 3.6, you can install ws2s from pypi:    
-```shell
-pip install ws2s-python --upgrade
-```
-
-if you can't install ws2s from pypi:    
-```shell
-pip install git+https://github.com/playlay/ws2s
-```
-
-after install ws2s:     
-`ws2sd` command can be used in shell,     
-`~/.ws2s/` directory will be created when you exec `ws2sd`      
-
-
-config
-======
-config file is store at `~/.ws2s/config.json`.    
+based on the socket_wrapper, other wrappers like redis_wrapper will be provided. then an online redis client will be available at [fredis](https://feling.io/redis/).    
 
 
 client case
 ============
+a ws2s server at `wss://feling.io/ws2s-server/` is ready for test case
+
 ```
 var ws = new WebSocket("wss://feling.io/ws2s-server/")
 ws.onmessage = (event) => {
@@ -69,6 +47,38 @@ ws.onclose = () => {
     console.log("onclose")
 }
 ```
+
+
+install
+=======
+ws2s works on py2、py3、windows、linux、osx.    
+
+if you are using python 3.6, you can install ws2s from pypi:    
+```shell
+pip install ws2s-python --upgrade
+```
+
+if you can't install ws2s from pypi, try install from github:    
+```shell
+pip install git+https://github.com/playlay/ws2s
+```
+
+after installed ws2s:     
+`ws2sd` command can be used in shell,     
+`~/.ws2s/` directory will be created when you exec `ws2sd`      
+
+
+config
+======
+config file is store at `~/.ws2s/config.json`.    
+
+
+todo list
+=========
+- auto-start on boot (ubuntu)
+- ws2s.js
+- fredis
+
 
 protocol
 ========
@@ -135,10 +145,3 @@ when "code" field > 0.
         usually means you want ws2s_server to connect 127.0.0.1,    
         but ws2s_server refused to do that     
 ```
-
-
-todo
-====
-- auto-start on boot (ubuntu)
-- ws2s.js
-- fredis
