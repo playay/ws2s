@@ -141,7 +141,7 @@ def main():
     if command == 'restart':
         return restart()
 
-    logger.info('commands:\n'
+    logger.info('\ncommands:\n'
                 + '    ws2sd help:    show this info. alias for "ws2sd" \n'
                   + '    ws2sd run:     run ws2s server in front\n'
                   + '    ws2sd start:   start ws2s server in background\n'
@@ -153,8 +153,7 @@ def main():
                   + '    ws2s.log:    logs\n'
                   + '    pid:         do not modify this file!\n\n'
 
-                + 'more information: https://github.com/playlay/ws2s'
-                  + '\n\n'
+                + 'more information: https://github.com/playlay/ws2s' + '\n'
                 )
 
 

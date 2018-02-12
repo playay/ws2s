@@ -22,8 +22,16 @@ install
 =======
 ws2s works on py2、py3、windows、linux、osx.    
 
+if you are using python 3.6, you can install ws2s from pypi
+-----------------------------------------------------------
 ```shell
 pip install ws2s-python --upgrade
+```
+
+if you can't install ws2s from pypi
+-----------------------------------
+```shell
+pip install git+https://github.com/playlay/ws2s
 ```
 
 after install ws2s:     
