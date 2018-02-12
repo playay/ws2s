@@ -23,7 +23,7 @@ install
 ws2s works on py2、py3、windows、linux、osx.    
 
 ```shell
-pip install ws2s --upgrade
+pip install ws2s-python --upgrade
 ```
 
 after install ws2s:     
