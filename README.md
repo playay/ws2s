@@ -9,9 +9,9 @@ first, a websocket client(we called **`"ws"`**) ask ws2s_server to create a sock
 then, **`"ws"`** ask ws2s_server to use **`"s"`** to send data.    
 when **`"s"`** received data, ws2s_server will notify **`"ws"`** with the received data.    
 
-with this workflow, javaScript running on a browser got the ability to use socket.    
+![](https://playlay.github.io/images/ws2s.png)    
 
-![](https://playlay.github.io/images/ws2s.png)
+with this workflow, javaScript running on a browser got the ability to use socket.    
 
 
 ws2s.js(upcoming)
@@ -120,7 +120,7 @@ message(we called response) received from ws2s_sever, is a json format string to
 }
 ```
 ```
-As in the example above:    
+As the example above:    
 - "message" field is for human.   
 - "success" field can be ignored.     
 
