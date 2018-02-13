@@ -11,6 +11,8 @@ when **`"s"`** received data, ws2s_server will notify **`"ws"`** with the receiv
 
 with this workflow, javaScript running on a browser got the ability to use socket.    
 
+![](https://playlay.github.io/images/ws2s.png)
+
 
 ws2s.js(upcoming)
 =================
