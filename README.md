@@ -1,9 +1,3 @@
-todo list
-=========
-- ws2s.js
-- fredis
-
-
 ws2s--bring socket to browser-side js
 =====================================
 ws2s(websocket to socket) is a websocket server that handle socket(tcp)s.   
@@ -21,7 +15,7 @@ with this workflow, javaScript running on a browser got the ability to use socke
 
 ws2s.js(upcoming)
 =================
-[ws2s-js](https://github.com/playlay/ws2s-js) is a javaScript websocket client wrapper that provide socket-like interface to communicate with ws2s_server.    
+[ws2s-js](ws2s-js/) is a javaScript websocket client wrapper that provide socket-like interface to communicate with ws2s_server.    
 based on the socket_wrapper, other wrappers like redis_wrapper will be provided. then an online redis client will be available at [fredis](https://feling.io/redis/).    
 
 
@@ -58,7 +52,7 @@ ws.onclose = () => {
 
 install
 =======
-ws2s works on py2、py3、windows、linux、osx.    
+ws2s works on py2、py3、linux、osx. i tried to support Windows, but there is too much adaptation to be handled for Windows.    
 
 if you are using python 3.6, you can install ws2s from pypi:    
 ```shell

@@ -99,7 +99,6 @@ setup(
     ],
 
     license='MIT',
-    platform='any',
 
     # This field adds keywords for your project which will appear on the
     # project page. What does your project relate to?

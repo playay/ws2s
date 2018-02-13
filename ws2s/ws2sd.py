@@ -29,7 +29,7 @@ import time
 import json
 import logging
 import logging.config
-import platform
+from multiprocessing import cpu_count
 
 from ws2s import ws2s_server
 from ws2s import ws2s_config
@@ -84,21 +84,13 @@ def start():
         ws2s_config.get['listen']['host']
     )
     pid_list = []
-    if platform.system() == 'Windows':
-        import subprocess
-        import shlex
-        cmd_args = shlex.split("python -m ws2s.ws2sd run")
-        popen = subprocess.Popen(cmd_args)
-        pid_list.append(str(popen.pid))
-    else:
-        from multiprocessing import cpu_count
-        for i in range(cpu_count()):
-            pid = os.fork()
-            if pid == 0:
-                del pid_list
-                server_instance.run_forever()
-            else:
-                pid_list.append(str(pid))
+    for i in range(cpu_count()):
+        pid = os.fork()
+        if pid == 0:
+            del pid_list
+            server_instance.run_forever()
+        else:
+            pid_list.append(str(pid))
     logger.info('start process{} at pid: {}'.format(
         'es' if len(pid_list) > 1 else '', '|'.join(pid_list)))
     with open(pid_path, 'w') as f:
@@ -114,8 +106,7 @@ def stop():
         for pid in pid_list:
             if pid:
                 logger.info('stop process at pid: {}'.format(pid))
-                os.system('{} {}'.format(
-                    'taskkill /F /pid' if platform.system() == 'Windows' else 'kill', pid))
+                os.system('kill {}'.format(pid))
             else:
                 logger.info('nothing to stop.')
     with open(pid_path, 'w') as f:
@@ -156,7 +147,7 @@ def main():
                 + '    ws2sd start:   start ws2s server in background\n'
                 + '    ws2sd stop:    stop ws2s server\n'
                 + '    ws2sd restart: alias for "stop, sleep(1), start"\n'
-                + '    ws2sd service: enable auto-start on boot, root permission required(test on ubuntu only)\n\n'
+                + '    ws2sd service: enable auto-start on boot(test on ubuntu only)\n\n'
 
                 + 'files: (all files are store in ~/.ws2s/)\n'
                 + '    config.json: configs. modify it and exec "ws2sd restart"\n'
