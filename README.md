@@ -17,6 +17,9 @@ client case
 ============
 a ws2s server at `wss://feling.io/ws2s-server/` is ready for test case
 
+
+use origin javaScript
+---------------------
 ```javaScript
 var ws = new WebSocket("wss://feling.io/ws2s-server/")
 ws.onmessage = (event) => {
@@ -27,14 +30,14 @@ ws.onopen = () => {
     ws.send(JSON.stringify(
         {
             command: "connect",
-            host: "www.baidu.com",
+            host: "feling.io",
             port: 80
         }
     ))
     ws.send(JSON.stringify(
         {
             command: "send",
-            data: "GET / HTTP/1.1\r\nHost: www.baidu.com\r\nConnection: close\r\n\r\n"
+            data: "GET / HTTP/1.1\r\nHost: feling.io\r\nConnection: close\r\n\r\n"
         }
     ))
 }
@@ -44,13 +47,36 @@ ws.onclose = () => {
 ```
 
 
-ws2s.js
-=================
-[ws2s-js](ws2s-js/) is a javaScript websocket client wrapper that provide socket-like interface to communicate with ws2s_server.    
+use [ws2s.js](ws2s-js/)
+-----------------------
+```javaScript
+var ws2s = new WS2S("wss://feling.io/ws2s-server/")
+var socket = ws2s.socket()
+socket.onOpen = () => {
+    console.log('onOpen')
+}
+socket.onRecv = (data) => {
+    console.log('onRecv', data)
+}
+socket.onClose = (reason) => {
+    console.log('onClose', reason)
+}
+socket.onError = (error) => {
+    console.log('onError', error)
+}
+$('#connect-button').bind("click", () => {
+    socket.connect("feling.io", 80)
+})
 
+$('#send-button').bind("click",  () => {
+    socket.send("GET / HTTP/1.1\r\nHost: feling.io\r\nConnection: close\r\n\r\n")
+})
 
-(upcoming)
-based on the socket_wrapper, other wrappers like redis_wrapper will be provided. then an online redis client will be available at [fredis](https://feling.io/redis/).    
+$('#close-button').bind("click",  () => {
+    socket.close()
+})
+```
+
 
 
 install
