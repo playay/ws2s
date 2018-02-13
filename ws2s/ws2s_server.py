@@ -70,7 +70,7 @@ def controller_advice(message_received):
 @controller_advice
 def message_received(client, server, message):
     msg = json.loads(message)
-    
+
     if msg['command'] == 'connect':
         unregister_handlers_if_exists(client['id'])
         close_tcp_socket_if_exists(client['id'])
@@ -87,7 +87,7 @@ def message_received(client, server, message):
     return json.dumps({
         'success': True,
         'code': 0,
-        'message': msg['command'] + 'done'
+        'message': msg['command'] + ' done'
     })
 
 
