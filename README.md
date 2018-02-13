@@ -13,12 +13,6 @@ when **`"s"`** received data, ws2s_server will notify **`"ws"`** with the receiv
 with this workflow, javaScript running on a browser got the ability to use socket.    
 
 
-ws2s.js(upcoming)
-=================
-[ws2s-js](ws2s-js/) is a javaScript websocket client wrapper that provide socket-like interface to communicate with ws2s_server.    
-based on the socket_wrapper, other wrappers like redis_wrapper will be provided. then an online redis client will be available at [fredis](https://feling.io/redis/).    
-
-
 client case
 ============
 a ws2s server at `wss://feling.io/ws2s-server/` is ready for test case
@@ -48,6 +42,15 @@ ws.onclose = () => {
     console.log("onclose")
 }
 ```
+
+
+ws2s.js
+=================
+[ws2s-js](ws2s-js/) is a javaScript websocket client wrapper that provide socket-like interface to communicate with ws2s_server.    
+
+
+(upcoming)
+based on the socket_wrapper, other wrappers like redis_wrapper will be provided. then an online redis client will be available at [fredis](https://feling.io/redis/).    
 
 
 install
@@ -138,4 +141,7 @@ when "code" field > 0.
     when "code" = 4:    
         usually means you want ws2s_server to connect 127.0.0.1,    
         but ws2s_server refused to do that     
+    
+    when "code" = 5:    
+        socket connection closed by socket server you connected to
 ```

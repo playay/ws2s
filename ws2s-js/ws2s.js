@@ -18,11 +18,11 @@ class WS2S {
                     this._socket.onOpen()
                 }
                 if (response.message == 'close done') {
-                    this._socket.onClose('close done')
+                    this._socket.onClose(response.message)
                 }
                 return
             }
-            if (response.code == 3) {
+            if (response.code == 5) {
                 this._socket.onClose(response.message)
                 return
             }

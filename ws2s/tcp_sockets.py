@@ -82,12 +82,12 @@ def register_handlers(socket_id, recv_handler, close_handler):
                     break
                 buffer = _tcp_sockets[socket_id].recv(1024)
                 if not buffer:
-                    close_handler('connection closed by peer')
+                    close_handler(5, 'connection closed by peer')
                     break
                 recv_handler(buffer.decode('utf8'))
             except Exception as e:
                 logging.exception('do_recv failed.')
-                close_handler(repr(e))
+                close_handler(1, repr(e))
                 break
         close_tcp_socket_if_exists(socket_id)
         unregister_handlers_if_exists(socket_id)

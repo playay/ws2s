@@ -93,25 +93,25 @@ def message_received(client, server, message):
 
 def _register_handlers(client, server):
     def recv_handler(data):
-        message = json.dumps({
+        response_message = json.dumps({
             'success': True,
             'code': -1,
             'message': 'recv data',
             'data': data
         })
-        server.send_message(client, message)
+        server.send_message(client, response_message)
         logger.debug("send to client: {}, message: {}.".format(
-            client['address'], message))
+            client['address'], response_message))
 
-    def close_handler(reason):
-        message = json.dumps({
+    def close_handler(code, message):
+        response_message = json.dumps({
             'success': False,
-            'code': IllegalSocketState.code,
-            'message': reason
+            'code': code,
+            'message': message
         })
-        server.send_message(client, message)
+        server.send_message(client, response_message)
         logger.debug("send to client: {}, message: {}.".format(
-            client['address'], message))
+            client['address'], response_message))
 
     register_handlers(client['id'], recv_handler, close_handler)
 
