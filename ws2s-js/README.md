@@ -1,9 +1,7 @@
-ws2s.js
-=================
+## ws2s.js
 [ws2s-js](ws2s-js/) is a javaScript websocket client wrapper that provide socket-like interface to communicate with ws2s_server.    
 
-socket_wrapper
---------------
+### socket_wrapper
 ```javaScript
 var ws2s = new WS2S("wss://feling.io/ws2s-server/")
 var socket = ws2s.socket()

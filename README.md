@@ -1,5 +1,4 @@
-ws2s--bring socket to browser-side js
-=====================================
+## ws2s--bring socket to browser-side js
 ws2s(websocket to socket) is a websocket server that handle socket(tcp)s.   
 
 the simplest workflow might be like this:    
@@ -13,13 +12,11 @@ when **`"s"`** received data, ws2s_server will notify **`"ws"`** with the receiv
 with this workflow, javaScript running on a browser got the ability to use socket.    
 
 
-client case
-============
+## client case
 a ws2s server at `wss://feling.io/ws2s-server/` is ready for test case
 
 
-use origin javaScript
----------------------
+### use origin javaScript
 ```javaScript
 var ws = new WebSocket("wss://feling.io/ws2s-server/")
 ws.onmessage = (event) => {
@@ -47,8 +44,7 @@ ws.onclose = () => {
 ```
 
 
-use [ws2s.js](ws2s-js/)
------------------------
+### use [ws2s.js](ws2s-js/)
 ```javaScript
 var ws2s = new WS2S("wss://feling.io/ws2s-server/")
 var socket = ws2s.socket()
@@ -79,8 +75,7 @@ $('#close-button').bind("click",  () => {
 
 
 
-install
-=======
+## install
 ws2s works on py2、py3、linux、osx. i tried to support Windows, but there is too much adaptation to be handled for Windows.    
 
 if you are using python 3.6, you can install ws2s from pypi:    
@@ -98,17 +93,12 @@ after installed ws2s:
 `~/.ws2s/` directory will be created when you exec `ws2sd`      
 
 
-config
-======
+## config
 config file is store at `~/.ws2s/config.json`.    
 
 
-protocol
-========
-
-request
--------
-
+## protocol
+### request
 all kinds of requests are listed below:     
 ```json
 {
@@ -129,8 +119,7 @@ you can find out that:
 1. message(we called request) send to ws2s_sever is a json format string.   
 2. a "command" field is required    
 
-response
---------
+### response
 message(we called response) received from ws2s_sever, is a json format string too:      
 ```json
 {
