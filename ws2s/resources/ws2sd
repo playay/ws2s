@@ -1,0 +1,33 @@
+#! /bin/sh
+
+### BEGIN INIT INFO
+# Provides:          ws2sd
+# Required-Start:    $remote_fs $network $named
+# Required-Stop:     $remote_fs $network $named
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start/stop ws2sd
+# Description:       Start/stop ws2sd 
+### END INIT INFO
+
+. /lib/lsb/init-functions
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+
+case "$1" in
+  start)
+    ws2sd start
+    ;;
+  stop)
+    ws2sd stop
+    ;;
+  restart)
+    ws2sd restart
+    ;;
+  *)
+    echo "Usage: service ws2sd {start|stop|restart}" >&2
+    exit 1
+    ;;
+esac
+
+exit 0

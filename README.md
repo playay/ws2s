@@ -1,3 +1,8 @@
+todo list
+=========
+- ws2s.js
+- fredis
+
 
 ws2s--bring socket to browser-side js
 =====================================
@@ -24,12 +29,12 @@ client case
 ============
 a ws2s server at `wss://feling.io/ws2s-server/` is ready for test case
 
-```
+```javaScript
 var ws = new WebSocket("wss://feling.io/ws2s-server/")
 ws.onmessage = (event) => {
     console.log("onmessage: ", event.data)
 }
-ws.onopen = (event) => {
+ws.onopen = () => {
     console.log("onopen")
     ws.send(JSON.stringify(
         {
@@ -61,7 +66,7 @@ pip install ws2s-python --upgrade
 ```
 
 if you can't install ws2s from pypi, try install from github:    
-```shell
+```shhell
 pip install git+https://github.com/playlay/ws2s
 ```
 
@@ -73,13 +78,6 @@ after installed ws2s:
 config
 ======
 config file is store at `~/.ws2s/config.json`.    
-
-
-todo list
-=========
-- auto-start on boot (ubuntu)
-- ws2s.js
-- fredis
 
 
 protocol

@@ -113,7 +113,8 @@ def stop():
         pid_list = f.readline().split('|')
         for pid in pid_list:
             if pid:
-                os.system('kill {}'.format(pid))
+                os.system('{} {}'.format(
+                    'taskkill /pid' if platform.system() == 'Windows' else 'kill', pid))
                 logger.info('stop process at pid: {}'.format(pid))
             else:
                 logger.info('nothing to stop.')
@@ -127,12 +128,18 @@ def restart():
     start()
 
 
+def set_start_on_boot():
+    os.system('sudo cp ' + os.path.dirname(__file__) + '/resources/ws2sd /etc/init.d/ws2sd '
+            + '&& sudo chmod +x /etc/init.d/ws2sd '
+            + '&& sudo update-rc.d ws2sd defaults')
+
+
 def main():
     command = sys.argv[1] if len(sys.argv) > 1 else 'help'
     if command == 'run':
         return run()
 
-    logging.config.fileConfig(os.path.dirname(__file__) + '/logging.conf')
+    logging.config.fileConfig(os.path.dirname(__file__) + '/resources/logging.conf')
 
     if command == 'start':
         return start()
@@ -140,18 +147,21 @@ def main():
         return stop()
     if command == 'restart':
         return restart()
+    if command == 'service':
+        return set_start_on_boot()
 
     logger.info('commands:\n'
                 + '    ws2sd help:    show this info. alias for "ws2sd" \n'
-                  + '    ws2sd run:     run ws2s server in front\n'
-                  + '    ws2sd start:   start ws2s server in background\n'
-                  + '    ws2sd stop:    stop ws2s server\n'
-                  + '    ws2sd restart: alias for "stop, sleep(1), start"\n\n'
+                + '    ws2sd run:     run ws2s server in front\n'
+                + '    ws2sd start:   start ws2s server in background\n'
+                + '    ws2sd stop:    stop ws2s server\n'
+                + '    ws2sd restart: alias for "stop, sleep(1), start"\n'
+                + '    ws2sd service: enable auto-start on boot, root permission required(test on ubuntu only)\n\n'
 
-                  + 'files: (all files are store in ~/.ws2s/)\n'
-                  + '    config.json: configs. modify it and exec "ws2sd restart"\n'
-                  + '    ws2s.log:    logs\n'
-                  + '    pid:         do not modify this file!\n\n'
+                + 'files: (all files are store in ~/.ws2s/)\n'
+                + '    config.json: configs. modify it and exec "ws2sd restart"\n'
+                + '    ws2s.log:    logs\n'
+                + '    pid:         do not modify this file!\n\n'
 
                 + 'more information: https://github.com/playlay/ws2s' + '\n'
                 )
