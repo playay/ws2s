@@ -38,12 +38,7 @@ def controller_advice(message_received):
         try:
             logger.debug("received from client: {}, message: {}.".format(
                 client['address'], message))
-            message_received(client, server, message)
-            response_message = json.dumps({
-                'success': True,
-                'code': 0,
-                'message': "done"
-            })
+            response_message = message_received(client, server, message)
         except (IllegalSocketState, ForbiddenTargetHost) as e:
             response_message = json.dumps({
                 'success': False,
@@ -75,7 +70,7 @@ def controller_advice(message_received):
 @controller_advice
 def message_received(client, server, message):
     msg = json.loads(message)
-
+    
     if msg['command'] == 'connect':
         unregister_handlers_if_exists(client['id'])
         close_tcp_socket_if_exists(client['id'])
@@ -88,6 +83,12 @@ def message_received(client, server, message):
     if msg['command'] == 'close':
         unregister_handlers_if_exists(client['id'])
         close_tcp_socket_if_exists(client['id'])
+    
+    return json.dumps({
+        'success': True,
+        'code': 0,
+        'message': msg['command'] + 'done'
+    })
 
 
 def _register_handlers(client, server):
