@@ -113,9 +113,9 @@ def stop():
         pid_list = f.readline().split('|')
         for pid in pid_list:
             if pid:
-                os.system('{} {}'.format(
-                    'taskkill /pid' if platform.system() == 'Windows' else 'kill', pid))
                 logger.info('stop process at pid: {}'.format(pid))
+                os.system('{} {}'.format(
+                    'taskkill /F /pid' if platform.system() == 'Windows' else 'kill', pid))
             else:
                 logger.info('nothing to stop.')
     with open(pid_path, 'w') as f:
