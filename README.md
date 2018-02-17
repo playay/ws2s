@@ -1,13 +1,13 @@
 ## ws2s--bring socket to browser-side js
 ws2s(websocket to socket) is a websocket server that handle socket(tcp)s.   
 
+![](https://playlay.github.io/images/ws2s.png)    
+
 the simplest workflow might be like this:    
 
 first, a websocket client(we called **`"ws"`**) ask ws2s_server to create a socket(we called **`"s"`**) for it.    
 then, **`"ws"`** ask ws2s_server to use **`"s"`** to send data.    
 when **`"s"`** received data, ws2s_server will notify **`"ws"`** with the received data.    
-
-![](https://playlay.github.io/images/ws2s.png)    
 
 with this workflow, javaScript running on a browser got the ability to use socket.    
 
@@ -46,8 +46,7 @@ ws.onclose = () => {
 
 ### use [ws2s.js](ws2s-js/)
 ```javaScript
-var ws2s = new WS2S("wss://feling.io/ws2s-server/")
-var socket = ws2s.socket()
+var socket = WS2S.init("wss://feling.io/ws2s-server/").newSocket()
 
 $('#connect-button').bind("click", () => {
     socket.connect("feling.io", 80)
@@ -61,17 +60,8 @@ $('#close-button').bind("click",  () => {
     socket.close()
 })
 
-socket.onOpen = () => {
-    console.log('onOpen')
-}
 socket.onRecv = (data) => {
     console.log('onRecv', data)
-}
-socket.onClose = (reason) => {
-    console.log('onClose', reason)
-}
-socket.onError = (error) => {
-    console.log('onError', error)
 }
 ```
 
