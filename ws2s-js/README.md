@@ -18,9 +18,13 @@ $('#close-button').bind("click",  () => {
 })
 
 socket.onReady = () => {
+    // connection to ws2s server is open, 
+    // socket is ready to use, now you can call socket.connect() method
     console.log('onReady')
 }
 socket.onOpen = () => {
+    // socket.connect() is done, 
+    // socket is ready to for send data. now you can call socke.send() method
     console.log('onOpen')
 }
 socket.onRecv = (data) => {

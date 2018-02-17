@@ -82,12 +82,64 @@ var WS2S = (function () {
         newRedisCient: (host, port, auth) => {
             var socketList = []
             var redisClient = {
+                onReady: () => {
+                    console.log('redisClient onReady')
+                },
                 onResponse: (data) => {
                     console.log(data)
                 },
                 onError: (error) => {
                     console.log('redisClient onError: ', error)
                 }
+            }
+
+            // parse redis response data
+            var parse = function (data, restOfData) {
+                if (restOfData === undefined) {
+                    restOfData = []
+                }
+                if (data.charAt(0) === '$') {
+                    stringLength = parseInt(data.substring(1, data.indexOf('\r\n')))
+                    if (stringLength === -1) {
+                        restOfData[0] = data.substring(data.indexOf('\r\n') + 2)
+                        return null
+                    }
+                    restOfData[0] = data.substring(data.indexOf('\r\n') + 2 + stringLength + 2)
+                    return data.substring(data.indexOf('\r\n') + 2, data.indexOf('\r\n') + 2 + stringLength)
+                }
+                if (data.charAt(0) === '+') {
+                    restOfData[0] = data.substring(data.indexOf('\r\n') + 2)
+                    return data.substring(1, data.indexOf('\r\n'))
+                }
+                if (data.charAt(0) === ':') {
+                    restOfData[0] = data.substring(data.indexOf('\r\n') + 2)
+                    return parseInt(data.substring(1, data.indexOf('\r\n')))
+                }
+                if (data.charAt(0) === '*') {
+                    arraySize = parseInt(data.substring(1, data.indexOf('\r\n')))
+                    if (arraySize === -1) {
+                        restOfData[0] = data.substring(data.indexOf('\r\n') + 2)
+                        return null
+                    }
+                    array = []
+                    if (arraySize === 0) {
+                        restOfData[0] = data.substring(data.indexOf('\r\n') + 2)
+                        return array
+                    }
+                    data = data.substring(data.indexOf('\r\n') + 2)
+                    for (let i = 0; i < arraySize; i++) {
+                        restOfData = []
+                        array.push(parse(data, restOfData))
+                        data = restOfData[0]
+                    }
+                    return array
+                }
+                if (data.charAt(0) === '-') {
+                    redisClient.onError(data)
+                    restOfData[0] = data.substring(data.indexOf('\r\n') + 2)
+                    return undefined
+                }
+                return data
             }
 
             var initNewSocket = function () {
@@ -99,9 +151,14 @@ var WS2S = (function () {
                     if (auth) {
                         redisClient.request("auth " + auth)
                     }
+                    redisClient.onReady()
                 }
                 socket.onRecv = (data) => {
-                    redisClient.onResponse(data)
+                    console.log('socket.onRecv', data)
+                    parsedData = parse(data)
+                    if (parsedData !== undefined) {
+                        redisClient.onResponse(parsedData)
+                    }
                 }
                 socket.onClose = () => {
                     socketList[0] = initNewSocket()
@@ -114,6 +171,7 @@ var WS2S = (function () {
 
             socketList[0] = initNewSocket()
 
+            // split one line command to wordList
             var splitLine = function (line) {
                 var wordList = []
                 var start = ''
@@ -178,4 +236,4 @@ var WS2S = (function () {
             return redisClient
         }
     }
-} ())
+}())

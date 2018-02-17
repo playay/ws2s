@@ -15,7 +15,6 @@ with this workflow, javaScript running on a browser got the ability to use socke
 ## client case
 a ws2s server at `wss://feling.io/ws2s-server/` is ready for test case
 
-
 ### use origin javaScript
 ```javaScript
 var ws = new WebSocket("wss://feling.io/ws2s-server/")
@@ -43,7 +42,6 @@ ws.onclose = () => {
 }
 ```
 
-
 ### use [ws2s.js](ws2s-js/)
 ```javaScript
 var socket = WS2S.init("wss://feling.io/ws2s-server/").newSocket()
@@ -56,15 +54,10 @@ $('#send-button').bind("click",  () => {
     socket.send("GET / HTTP/1.1\r\nHost: feling.io\r\nConnection: close\r\n\r\n")
 })
 
-$('#close-button').bind("click",  () => {
-    socket.close()
-})
-
 socket.onRecv = (data) => {
     console.log('onRecv', data)
 }
 ```
-
 
 
 ## install
