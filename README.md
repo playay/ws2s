@@ -44,7 +44,7 @@ ws.onclose = () => {
 
 ### use [ws2s.js](ws2s-js/)
 ```javaScript
-var socket = WS2S.init("wss://feling.io/ws2s-server/").newSocket()
+var socket = (new WS2S("wss://feling.io/ws2s-server/")).newSocket()
 
 $('#connect-button').bind("click", () => {
     socket.connect("feling.io", 80)
@@ -70,7 +70,7 @@ pip install ws2s-python --upgrade
 
 if you can't install ws2s from pypi, try install from github:    
 ```shhell
-pip install git+https://github.com/playlay/ws2s
+pip install git+https://github.com/playlay/ws2s --upgrade
 ```
 
 after installed ws2s:     
