@@ -79,6 +79,8 @@ class WS2S {
     }
 
     newRedisCient(host, port, auth) {
+        var utf8Encoder = new TextEncoder('utf-8')
+        var utf8Decoder = new TextDecoder('utf-8')
         var socketList = []
         var redisClient = {
             onReady: () => {
@@ -104,8 +106,12 @@ class WS2S {
                     return null
                 }
                 var nextLine = data.substring(data.indexOf('\r\n') + 2)
-                restOfData[0] = nextLine.substring(nextLine.indexOf('\r\n') + 2)
-                return nextLine.substring(0, nextLine.indexOf('\r\n'))
+                restOfData[0] = utf8Decoder.decode(
+                    utf8Encoder.encode(nextLine).slice(stringByteLength + 2)
+                )
+                return utf8Decoder.decode(
+                    utf8Encoder.encode(nextLine).slice(0, stringByteLength)
+                )
             }
             if (data.charAt(0) === '+') {
                 restOfData[0] = data.substring(data.indexOf('\r\n') + 2)
@@ -224,7 +230,7 @@ class WS2S {
                     cmd.push('\r\n')
                     wordList.forEach((word) => {
                         cmd.push('$')
-                        cmd.push((new TextEncoder('utf-8').encode(word)).length)
+                        cmd.push(utf8Encoder.encode(word).length)
                         cmd.push('\r\n')
                         cmd.push(word)
                         cmd.push('\r\n')
