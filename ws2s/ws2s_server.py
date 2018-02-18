@@ -83,7 +83,7 @@ def message_received(client, server, message):
     if msg['command'] == 'close':
         unregister_handlers_if_exists(client['id'])
         close_tcp_socket_if_exists(client['id'])
-    
+
     return json.dumps({
         'success': True,
         'code': 0,

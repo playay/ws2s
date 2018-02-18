@@ -44,7 +44,7 @@ ws.onclose = () => {
 
 ### use [ws2s.js](ws2s-js/)
 ```javaScript
-var socket = (new WS2S("wss://feling.io/ws2s-server/")).newSocket()
+var socket = new WS2S("wss://feling.io/ws2s-server/").newSocket()
 
 $('#connect-button').bind("click", () => {
     socket.connect("feling.io", 80)

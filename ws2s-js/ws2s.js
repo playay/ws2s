@@ -19,8 +19,8 @@ class WS2S {
             onRecv: (data) => {
                 console.log('socket onRecv: ', data)
             },
-            onClose: (reason) => {
-                console.log('socket onClose: ', reason)
+            onClose: () => {
+                console.log('socket onClose')
             },
             onError: (error) => {
                 console.log('socket onError: ', error)
@@ -48,7 +48,7 @@ class WS2S {
             socket.onReady()
         }
         ws.onclose = () => {
-            socket.onClose("connection to ws2s server was closed");
+            socket.onClose()
             clearInterval(ping)
         }
         ws.onerror = (error) => {
@@ -65,12 +65,12 @@ class WS2S {
                     socket.onOpen()
                 }
                 if (response.message == 'close done') {
-                    socket.onClose(response.message)
+                    ws.close()
                 }
                 return
             }
-            if (response.code == 5) {
-                socket.onClose(response.message)
+            if (response.code == 5 || response.code == 3) {
+                ws.close()
                 return
             }
             socket.onError(response)
@@ -98,13 +98,14 @@ class WS2S {
                 restOfData = []
             }
             if (data.charAt(0) === '$') {
-                var stringLength = parseInt(data.substring(1, data.indexOf('\r\n')))
-                if (stringLength === -1) {
+                var stringByteLength = parseInt(data.substring(1, data.indexOf('\r\n')))
+                if (stringByteLength === -1) {
                     restOfData[0] = data.substring(data.indexOf('\r\n') + 2)
                     return null
                 }
-                restOfData[0] = data.substring(data.indexOf('\r\n') + 2 + stringLength + 2)
-                return data.substring(data.indexOf('\r\n') + 2, data.indexOf('\r\n') + 2 + stringLength)
+                var nextLine = data.substring(data.indexOf('\r\n') + 2)
+                restOfData[0] = nextLine.substring(nextLine.indexOf('\r\n') + 2)
+                return nextLine.substring(0, nextLine.indexOf('\r\n'))
             }
             if (data.charAt(0) === '+') {
                 restOfData[0] = data.substring(data.indexOf('\r\n') + 2)
@@ -162,6 +163,7 @@ class WS2S {
                 socketList[0] = initNewSocket(thisInstance)
             }
             socket.onError = (error) => {
+                socketList[0].close()
                 redisClient.onError(error)
             }
             return socket
@@ -222,7 +224,7 @@ class WS2S {
                     cmd.push('\r\n')
                     wordList.forEach((word) => {
                         cmd.push('$')
-                        cmd.push(word.length)
+                        cmd.push((new TextEncoder('utf-8').encode(word)).length)
                         cmd.push('\r\n')
                         cmd.push(word)
                         cmd.push('\r\n')
