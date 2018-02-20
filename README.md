@@ -13,7 +13,8 @@ with this workflow, javaScript running on a browser got the ability to use socke
 
 
 ## client case
-a ws2s server at `wss://feling.io/ws2s-server/` is ready for test case. an online redis gui client powered by ws2s is provided at [fredis](https://feling.io/redis/).
+a ws2s server at `wss://feling.io/ws2s-server/` is ready for test case.     
+an online redis gui client powered by ws2s is provided at [fredis](https://feling.io/redis/).
 
 ### use origin javaScript
 ```javaScript
