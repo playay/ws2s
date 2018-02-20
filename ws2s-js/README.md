@@ -57,5 +57,5 @@ $('#button').bind("click", () => {
 })
 ```
    
-based on redis_wrapper, an online redis client is provided at [fredis](https://feling.io/redis/).    
+based on redis_wrapper, an online redis gui client is provided at [fredis](https://feling.io/redis/).    
 
