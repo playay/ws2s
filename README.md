@@ -61,17 +61,18 @@ socket.onRecv = (data) => {
 
 
 ## install
-ws2s works on py2、py3、linux、osx. i tried to support Windows, but there is too much adaptation to be handled for Windows.    
+ws2s works on py2、py3、Linux、OSX. I tried to support Windows, but there is too much adaptation to be handled for Windows.    
 
-if you are using python 3.6, you can install ws2s from pypi:    
+It is recommended to install from github:    
+```shell
+pip install git+https://github.com/playlay/ws2s --upgrade
+```
+
+you can also install ws2s from pypi:    
 ```shell
 pip install ws2s-python --upgrade
 ```
 
-if you can't install ws2s from pypi, try install from github:    
-```shhell
-pip install git+https://github.com/playlay/ws2s --upgrade
-```
 
 after installed ws2s:     
 `ws2sd` command can be used in shell,     
