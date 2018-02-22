@@ -79,6 +79,135 @@ class WS2S {
     }
 
     newRedisCient(host, port, auth) {
+        class ResponseHandler {
+            constructor(oldStatus) {
+                this.init(oldStatus)
+            }
+
+            init(oldStatus){
+                if (oldStatus) {
+                    this.status = oldStatus
+                    return
+                }
+                this.status = {
+                    rootType: '',
+
+                    arraySizeByteList: [],
+                    arraySize: -2,
+                    arrayIndex: 0,
+                    childrenStatus: null,
+
+                    stringLengthByteList: [],
+                    stringLength: -2,
+                    stringIndex: 0,
+
+                    complete: false,
+                    isNullResult: false,
+                    resultByteList: [],
+                }
+            }
+
+            push(byteList) {
+                if (this.status.complete) {
+                    this.init()
+                }
+                if (this.status.rootType === '') {
+                    this.status.rootType = String.fromCharCode(byteList.shift())
+                }
+                if (this.status.rootType === '+' 
+                    || this.status.rootType === '-' 
+                    || this.status.rootType === ':') {
+                    var stopByte = '\r'.charCodeAt(0)
+                    var b = byteList.shift()
+                    while (b !== stopByte && b !== undefined) {
+                        this.status.resultByteList.push(b)
+                        b = byteList.shift()
+                    }
+                    if (b == stopByte) {
+                        byteList.shift()
+                        this.status.complete = true
+                    }
+                }
+                if (this.status.rootType === '$') {
+                    if (this.status.stringLength === -2) {// get length
+                        var stopByte = '\r'.charCodeAt(0)
+                        var b = byteList.shift()
+                        while (b !== stopByte && b !== undefined) {
+                            this.status.stringLengthByteList.push(b)
+                            b = byteList.shift()
+                        }
+                        if (b == stopByte) {
+                            byteList.shift()
+                            this.status.stringLength = parseInt(utf8Decoder.decode(new Uint8Array(this.status.stringLengthByteList)))
+                        }
+                    }
+                    if (this.status.stringLength === -1) {
+                        this.status.complete = true
+                        this.status.isNullResult = true
+                    }
+                    if (this.status.stringLength > -1) {
+                        var b = byteList.shift()
+                        while (this.status.stringIndex < this.status.stringLength && b !== undefined) {
+                            this.status.resultByteList.push(b)
+                            b = byteList.shift()
+                            this.status.stringIndex  = this.status.stringIndex  + 1
+                        }
+                        if (this.status.stringIndex === this.status.stringLength) {
+                            byteList.shift()
+                            this.status.complete = true
+                        }
+                    }
+                }
+                if (this.status.rootType === '*') {
+                    if (this.status.arraySize === -2) {// get length
+                        var stopByte = '\r'.charCodeAt(0)
+                        var b = byteList.shift()
+                        while (b !== stopByte && b !== undefined) {
+                            this.status.arraySizeByteList.push(b)
+                            b = byteList.shift()
+                        }
+                        if (b == stopByte) {
+                            byteList.shift()
+                            this.status.arraySize = parseInt(utf8Decoder.decode(new Uint8Array(this.status.arraySizeByteList)))
+                        }
+                    }
+                    if (this.status.arraySize === -1) {
+                        this.status.complete = true
+                        this.status.isNullResult = true
+                    }
+                    if (this.status.arraySize > -1) {
+                        while(this.status.arrayIndex < this.status.arraySize && byteList.length > 0) {
+                            var itemHandler = new ResponseHandler(this.status.childrenStatus)
+                            var itemStatus = itemHandler.push(byteList)
+                            while (!itemStatus.complete && byteList.length > 0) {
+                                itemStatus = itemHandler.push(byteList)
+                            }
+                            if (itemStatus.complete) {
+                                var prefixIndex = (this.status.arrayIndex + 1) + ') '
+                                for (let i = 0; i < prefixIndex.length; i++) {
+                                    this.status.resultByteList.push(prefixIndex.charCodeAt(i))
+                                }
+                                for (let i = 0; i < itemStatus.resultByteList.length; i++) {
+                                    this.status.resultByteList.push(itemStatus.resultByteList[i])
+                                }
+                                if (this.status.arrayIndex < this.status.arraySize - 1) {
+                                    this.status.resultByteList.push('\n'.charCodeAt(0))
+                                }
+                                this.status.arrayIndex = this.status.arrayIndex + 1
+                            }
+                            if (!itemStatus.complete) {
+                                this.status.childrenStatus = itemStatus
+                            }
+                        }
+                        if (this.status.arrayIndex === this.status.arraySize) {
+                            this.status.complete = true
+                        }
+                    }
+                }
+                return this.status
+            }
+        }
+        var responseHandler = new ResponseHandler()
         var utf8Encoder = new TextEncoder('utf-8')
         var utf8Decoder = new TextDecoder('utf-8')
         var socketList = []
@@ -94,60 +223,6 @@ class WS2S {
             }
         }
 
-        // parse redis response data
-        var parse = function (data, restOfData) {
-            if (restOfData === undefined) {
-                restOfData = []
-            }
-            if (data.charAt(0) === '$') {
-                var stringByteLength = parseInt(data.substring(1, data.indexOf('\r\n')))
-                if (stringByteLength === -1) {
-                    restOfData[0] = data.substring(data.indexOf('\r\n') + 2)
-                    return null
-                }
-                var nextLine = data.substring(data.indexOf('\r\n') + 2)
-                restOfData[0] = utf8Decoder.decode(
-                    utf8Encoder.encode(nextLine).slice(stringByteLength + 2)
-                )
-                return utf8Decoder.decode(
-                    utf8Encoder.encode(nextLine).slice(0, stringByteLength)
-                )
-            }
-            if (data.charAt(0) === '+') {
-                restOfData[0] = data.substring(data.indexOf('\r\n') + 2)
-                return data.substring(1, data.indexOf('\r\n'))
-            }
-            if (data.charAt(0) === ':') {
-                restOfData[0] = data.substring(data.indexOf('\r\n') + 2)
-                return parseInt(data.substring(1, data.indexOf('\r\n')))
-            }
-            if (data.charAt(0) === '*') {
-                var arraySize = parseInt(data.substring(1, data.indexOf('\r\n')))
-                if (arraySize === -1) {
-                    restOfData[0] = data.substring(data.indexOf('\r\n') + 2)
-                    return null
-                }
-                var array = []
-                if (arraySize === 0) {
-                    restOfData[0] = data.substring(data.indexOf('\r\n') + 2)
-                    return array
-                }
-                data = data.substring(data.indexOf('\r\n') + 2)
-                for (let i = 0; i < arraySize; i++) {
-                    restOfData = []
-                    array.push(parse(data, restOfData))
-                    data = restOfData[0]
-                }
-                return array
-            }
-            if (data.charAt(0) === '-') {
-                redisClient.onError(data)
-                restOfData[0] = data.substring(data.indexOf('\r\n') + 2)
-                return undefined
-            }
-            return data
-        }
-
         var initNewSocket = function (thisInstance) {
             var socket = thisInstance.newSocket()
             socket.onReady = () => {
@@ -160,9 +235,24 @@ class WS2S {
                 redisClient.onReady()
             }
             socket.onRecv = (data) => {
-                var parsedData = parse(data)
-                if (parsedData !== undefined) {
-                    redisClient.onResponse(parsedData)
+                var startTime = new Date().getTime()
+                var status = responseHandler.push(data)
+                console.log(new Date().getTime() - startTime)
+                if (status.complete) {
+                    if (status.isNullResult) {
+                        redisClient.onError("a null object is recevied form redis server")
+                        return
+                    }
+                    var parsedString = utf8Decoder.decode(new Uint8Array(status.resultByteList))
+                    if (status.rootType === '+' || status.rootType === '$' || status.rootType === '*') {
+                        redisClient.onResponse(parsedString)
+                    }
+                    if (status.rootType === '-') {
+                        redisClient.onError(parsedString)
+                    }
+                    if (status.rootType === ':') {
+                        redisClient.onResponse(parseInt(parsedString))
+                    }
                 }
             }
             socket.onClose = () => {
