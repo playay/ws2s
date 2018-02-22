@@ -113,7 +113,7 @@ message(we called response) received from ws2s_sever, is a json format string to
     "success": true,
     "code": -1,
     "message": "recv data",
-    "data": ""
+    "data": []
 }
 ```
 ```
@@ -122,7 +122,7 @@ As the example above:
 - "success" field can be ignored.     
 
 when "code" field = -1, "data" field is presented.     
-    that means ws2s_server received data from peer.      
+    that means ws2s_server received data from peer. "data" is a int array, each element represents a byte.     
 
 when "code" field = 0.      
     usually means ws2s_server successfully completed the most recent command    
