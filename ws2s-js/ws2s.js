@@ -235,9 +235,7 @@ class WS2S {
                 redisClient.onReady()
             }
             socket.onRecv = (data) => {
-                var startTime = new Date().getTime()
                 var status = responseHandler.push(data)
-                console.log(new Date().getTime() - startTime)
                 if (status.complete) {
                     if (status.isNullResult) {
                         redisClient.onError("a null object is recevied form redis server")
