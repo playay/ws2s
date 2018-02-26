@@ -122,9 +122,10 @@ def new_client(client, server):
 
 
 def client_left(client, server):
-    logger.debug("client: {} disconnected.".format(client['address']))
-    unregister_handlers_if_exists(client['id'])
-    close_tcp_socket_if_exists(client['id'])
+    if client:
+        logger.debug("client: {} disconnected.".format(client['address']))
+        unregister_handlers_if_exists(client['id'])
+        close_tcp_socket_if_exists(client['id'])
 
 
 def new_instance(port, host):
