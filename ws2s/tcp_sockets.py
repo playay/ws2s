@@ -81,7 +81,7 @@ def register_handlers(socket_id, recv_handler, close_handler):
             try:
                 if socket_id not in _tcp_sockets:
                     break
-                buffer = _tcp_sockets[socket_id].recv(4096)
+                buffer = _tcp_sockets[socket_id].recv(1024 * 10)
                 if not buffer:
                     close_handler(5, 'connection closed by peer')
                     break
