@@ -254,6 +254,7 @@ class WS2S {
                 }
             }
             socket.onClose = () => {
+                responseHandler.init()
                 socketList[0] = initNewSocket(thisInstance)
             }
             socket.onError = (error) => {
