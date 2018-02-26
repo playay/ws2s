@@ -117,7 +117,8 @@ def _register_handlers(client, server):
 
 
 def new_client(client, server):
-    logger.debug("new client: {} connected.".format(client['address']))
+    if client:
+        logger.debug("new client: {} connected.".format(client['address']))
 
 
 def client_left(client, server):

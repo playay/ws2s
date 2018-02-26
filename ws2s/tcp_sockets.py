@@ -23,6 +23,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
+import sys
 import logging
 logger = logging.getLogger(__name__)
 
@@ -84,7 +85,10 @@ def register_handlers(socket_id, recv_handler, close_handler):
                 if not buffer:
                     close_handler(5, 'connection closed by peer')
                     break
-                recv_handler(list(buffer))
+                if sys.version_info < (3, 0):
+                    recv_handler(list(bytearray(buffer)))
+                else:
+                    recv_handler(list(buffer))
             except Exception as e:
                 logging.exception('do_recv failed.')
                 close_handler(1, repr(e))
