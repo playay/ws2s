@@ -54,10 +54,19 @@ class WS2S {
         ws.onerror = (error) => {
             socket.onError(error)
         }
+        var receiving = false
+        var toReceive = []
         ws.onmessage = (event) => {
             var response = JSON.parse(event.data)
             if (response.code < 0) {
-                socket.onRecv(response.data)
+                toReceive.push(response.data)
+                if (!receiving) {
+                    receiving = true
+                    while (toReceive.length > 0) {
+                        socket.onRecv(toReceive.shift())
+                    }
+                    receiving = false
+                }
                 return
             }
             if (response.code == 0) {
@@ -91,6 +100,7 @@ class WS2S {
                 }
                 this.status = {
                     rootType: '',
+                    shiftOne: false,
 
                     arraySizeByteList: [],
                     arraySize: -2,
@@ -108,12 +118,25 @@ class WS2S {
             }
 
             push(byteList) {
+                if (this.status.shiftOne) {
+                    byteList.shift()
+                    this.status.shiftOne = false
+                }
                 if (this.status.complete) {
                     this.init()
                 }
-                if (this.status.rootType === '') {
-                    this.status.rootType = String.fromCharCode(byteList.shift())
+                while (this.status.rootType !== '+' 
+                        && this.status.rootType !== '-'
+                        && this.status.rootType !== ':'
+                        && this.status.rootType !== '$'
+                        && this.status.rootType !== '*') {
+                    let x = byteList.shift()
+                    if (x === undefined || byteList.length === 0) {
+                        return this.status
+                    }
+                    this.status.rootType = String.fromCharCode(x)
                 }
+
                 if (this.status.rootType === '+' 
                     || this.status.rootType === '-' 
                     || this.status.rootType === ':') {
@@ -124,7 +147,11 @@ class WS2S {
                         b = byteList.shift()
                     }
                     if (b == stopByte) {
-                        byteList.shift()
+                        if (byteList.length > 0) {
+                            byteList.shift()
+                        } else {
+                            this.status.shiftOne = true
+                        }
                         this.status.complete = true
                     }
                 }
@@ -137,7 +164,11 @@ class WS2S {
                             b = byteList.shift()
                         }
                         if (b == stopByte) {
-                            byteList.shift()
+                            if (byteList.length > 0) {
+                                byteList.shift()
+                            } else {
+                                this.status.shiftOne = true
+                            }
                             this.status.stringLength = parseInt(utf8Decoder.decode(new Uint8Array(this.status.stringLengthByteList)))
                         }
                     }
@@ -153,7 +184,11 @@ class WS2S {
                             this.status.stringIndex  = this.status.stringIndex  + 1
                         }
                         if (this.status.stringIndex === this.status.stringLength) {
-                            byteList.shift()
+                            if (byteList.length > 0) {
+                                byteList.shift()
+                            } else {
+                                this.status.shiftOne = true
+                            }
                             this.status.complete = true
                         }
                     }
@@ -167,7 +202,11 @@ class WS2S {
                             b = byteList.shift()
                         }
                         if (b == stopByte) {
-                            byteList.shift()
+                            if (byteList.length > 0) {
+                                byteList.shift()
+                            } else {
+                                this.status.shiftOne = true
+                            }
                             this.status.arraySize = parseInt(utf8Decoder.decode(new Uint8Array(this.status.arraySizeByteList)))
                         }
                     }
