@@ -309,10 +309,14 @@ class WebSocketHandler(StreamRequestHandler):
             raise Exception("Message is too big. Consider breaking it into chunks.")
             return
 
-        self.request.send(header + payload)
+        self.request.sendall(header + payload)
 
     def handshake(self):
-        message = self.request.recv(1024).decode().strip()
+        try:
+            message = self.request.recv(1024 * 16).decode().strip()
+        except Exception as e:
+            self.keep_alive = False
+            return
         upgrade = re.search('\nupgrade[\s]*:[\s]*websocket', message.lower())
         if not upgrade:
             self.keep_alive = False
