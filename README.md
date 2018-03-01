@@ -13,12 +13,12 @@ with this workflow, javaScript running on a browser got the ability to use socke
 
 
 ## client case
-a ws2s server at `wss://feling.io/ws2s-server/` is ready for test case.     
+a ws2s server at `wss://ws2s.feling.io/` is ready for test case.     
 an online redis gui client powered by ws2s is provided at [fredis](https://feling.io/redis/).
 
 ### use origin javaScript
 ```javaScript
-var ws = new WebSocket("wss://feling.io/ws2s-server/")
+var ws = new WebSocket("wss://ws2s.feling.io/")
 ws.onmessage = (event) => {
     console.log("onmessage: ", event.data)
 }
@@ -45,7 +45,7 @@ ws.onclose = () => {
 
 ### use [ws2s.js](ws2s-js/)
 ```javaScript
-var socket = new WS2S("wss://feling.io/ws2s-server/").newSocket()
+var socket = new WS2S("wss://ws2s.feling.io/").newSocket()
 
 $('#connect-button').bind("click", () => {
     socket.connect("feling.io", 80)

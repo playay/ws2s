@@ -3,7 +3,7 @@ ws2s.js is a javaScript websocket client wrapper that provide socket-like interf
 
 ### socket_wrapper
 ```javaScript
-var socket = new WS2S("wss://feling.io/ws2s-server/").newSocket()
+var socket = new WS2S("wss://ws2s.feling.io/").newSocket()
 
 $('#connect-button').bind("click", () => {
     socket.connect("feling.io", 80)
@@ -42,7 +42,7 @@ socket.onError = (error) => {
 redis_wrapper is provided based on the socket_wrapper.
 
 ```javaScript
-redis = new WS2S("wss://feling.io/ws2s-server/").newRedisCient("hostname", 6379) // (host, port, auth)
+redis = new WS2S("wss://ws2s.feling.io/").newRedisCient("hostname", 6379) // (host, port, auth)
 
 redis.onResponse = (data) => {
     console.log(data)
