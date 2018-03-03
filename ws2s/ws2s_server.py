@@ -87,6 +87,9 @@ def message_received(client, server, message):
         unregister_handlers_if_exists(client['id'])
         close_tcp_socket_if_exists(client['id'])
 
+    if msg['command'] == 'ping':
+        return
+
     return json.dumps({
         'success': True,
         'code': 0,
