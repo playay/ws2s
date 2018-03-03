@@ -13,6 +13,10 @@ $('#send-button').bind("click",  () => {
     socket.send("GET / HTTP/1.1\r\nHost: feling.io\r\nConnection: close\r\n\r\n")
 })
 
+$('#send-bytes-button').bind("click",  () => {
+    socket.sendb(new TextEncoder('utf8').encode('GET /xxx HTTP/1.1\r\nHost: feling.io\r\nConnection: close\r\n\r\n'))
+})
+
 $('#close-button').bind("click",  () => {
     socket.close()
 })
