@@ -87,14 +87,11 @@ def message_received(client, server, message):
         unregister_handlers_if_exists(client['id'])
         close_tcp_socket_if_exists(client['id'])
 
-    if True:
-    # if msg['command'] in ['connect', 'close']:
-        return json.dumps({
-            'success': True,
-            'code': 0,
-            'message': msg['command'] + ' done'
-        })
-    return
+    return json.dumps({
+        'success': True,
+        'code': 0,
+        'message': msg['command'] + ' done'
+    })
 
 
 def _register_handlers(client, server):

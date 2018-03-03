@@ -314,7 +314,7 @@ class WebSocketHandler(StreamRequestHandler):
         self.text_to_send.insert(0, header + payload)
         if not self.sendding_text: 
             self.sendding_text = True
-            while len(self.text_to_send) > 0 :
+            while len(self.text_to_send) > 0:
                 self.request.sendall(self.text_to_send.pop())
             self.sendding_text = False
 
