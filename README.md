@@ -13,12 +13,12 @@ with this workflow, javaScript running on a browser got the ability to use socke
 
 
 ## client case
-a ws2s server at `wss://ws2s.feling.io/` is ready for test case.     
+a ws2s server at `wss://ws2s.feling.io/v2/` is ready for test case.     
 an online redis gui client powered by ws2s is provided at [fredis](https://feling.io/redis/).
 
 ### use origin javaScript
 ```javaScript
-var ws = new WebSocket("wss://ws2s.feling.io/")
+var ws = new WebSocket("wss://ws2s.feling.io/v2/")
 ws.onmessage = (event) => {
     console.log("onmessage: ", event.data)
 }
@@ -45,7 +45,7 @@ ws.onclose = () => {
 
 ### use [ws2s.js](ws2s-js/)
 ```javaScript
-var socket = new WS2S("wss://ws2s.feling.io/").newSocket()
+var socket = new WS2S("wss://ws2s.feling.io/v2/").newSocket()
 
 $('#connect-button').bind("click", () => {
     socket.connect("feling.io", 80)
@@ -98,6 +98,10 @@ all kinds of requests are listed below:
     "data":"GET / HTTP/1.1\r\nHost: 127.0.0.1\r\nConnection: close\r\n\r\n"
 }
 {
+    "command": "sendb",// send bytes by base64
+    "data":"R0VUIC8gSFRUUC8xLjENCkhvc3Q6IDEyNy4wLjAuMQ0KQ29ubmVjdGlvbjogY2xvc2UNCg0K"
+}
+{
     "command": "close"
 }
 ```
@@ -113,7 +117,7 @@ message(we called response) received from ws2s_sever, is a json format string to
     "success": true,
     "code": -1,
     "message": "recv data",
-    "data": []
+    "data": "JDINCk9LDQo="
 }
 ```
 ```
@@ -122,7 +126,7 @@ As the example above:
 - "success" field can be ignored.     
 
 when "code" field = -1, "data" field is presented.     
-    that means ws2s_server received data from peer. "data" is a int array, each element represents a byte.     
+    that means ws2s_server received data from peer. "data" is a base64 string representing a byte array.     
 
 when "code" field = 0.      
     usually means ws2s_server successfully completed the most recent command    

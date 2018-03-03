@@ -24,6 +24,7 @@
 # SOFTWARE.
 
 import sys
+import base64
 import logging
 logger = logging.getLogger(__name__)
 
@@ -69,10 +70,15 @@ def open_tcp_socket(socket_id, host, port):
     _tcp_sockets[socket_id].connect((host, port))
 
 
-def sendall(socket_id, data):
+def sendall(socket_id, str_data):
     if socket_id not in _tcp_sockets:
         raise IllegalSocketState(socket_id)
-    _tcp_sockets[socket_id].sendall(data.encode('utf8'))
+    _tcp_sockets[socket_id].sendall(str_data.encode('utf8'))
+
+def sendallb(socket_id, base64_str_data):
+    if socket_id not in _tcp_sockets:
+        raise IllegalSocketState(socket_id)
+    _tcp_sockets[socket_id].sendall(base64.b64decode(base64_str_data))
 
 
 def register_handlers(socket_id, recv_handler, close_handler):
@@ -85,10 +91,10 @@ def register_handlers(socket_id, recv_handler, close_handler):
                 if not buffer:
                     close_handler(5, 'connection closed by peer')
                     break
-                if sys.version_info < (3, 0):
-                    recv_handler(list(bytearray(buffer)))
+                if sys.version_info > (3, 0):
+                    recv_handler(base64.b64encode(buffer).decode('utf8'))
                 else:
-                    recv_handler(list(buffer))
+                    recv_handler(base64.b64encode(buffer))
             except Exception as e:
                 logging.exception('do_recv failed.')
                 close_handler(1, repr(e))

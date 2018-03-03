@@ -80,6 +80,9 @@ def message_received(client, server, message):
     if msg['command'] == 'send':
         sendall(client['id'], msg['data'])
 
+    if msg['command'] == 'sendb':
+        sendallb(client['id'], msg['data'])
+
     if msg['command'] == 'close':
         unregister_handlers_if_exists(client['id'])
         close_tcp_socket_if_exists(client['id'])

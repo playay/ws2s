@@ -1,3 +1,12 @@
+/**
+ * WS2SBase64
+ * 
+ * byteLength - Takes a base64 string and returns length of byte array
+ * toByteArray - Takes a base64 string and returns a byte array
+ * fromByteArray - Takes a byte array and returns a base64 string
+ */
+(function(r){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=r()}else if(typeof define==="function"&&define.amd){define([],r)}else{var e;if(typeof window!=="undefined"){e=window}else if(typeof global!=="undefined"){e=global}else if(typeof self!=="undefined"){e=self}else{e=this}e.WS2SBase64=r()}})(function(){var r,e,n;return function(){function r(e,n,t){function o(i,a){if(!n[i]){if(!e[i]){var u=typeof require=="function"&&require;if(!a&&u)return u(i,!0);if(f)return f(i,!0);var d=new Error("Cannot find module '"+i+"'");throw d.code="MODULE_NOT_FOUND",d}var c=n[i]={exports:{}};e[i][0].call(c.exports,function(r){var n=e[i][1][r];return o(n?n:r)},c,c.exports,r,e,n,t)}return n[i].exports}var f=typeof require=="function"&&require;for(var i=0;i<t.length;i++)o(t[i]);return o}return r}()({"/":[function(r,e,n){"use strict";n.byteLength=c;n.toByteArray=v;n.fromByteArray=s;var t=[];var o=[];var f=typeof Uint8Array!=="undefined"?Uint8Array:Array;var i="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";for(var a=0,u=i.length;a<u;++a){t[a]=i[a];o[i.charCodeAt(a)]=a}o["-".charCodeAt(0)]=62;o["_".charCodeAt(0)]=63;function d(r){var e=r.length;if(e%4>0){throw new Error("Invalid string. Length must be a multiple of 4")}return r[e-2]==="="?2:r[e-1]==="="?1:0}function c(r){return r.length*3/4-d(r)}function v(r){var e,n,t,i,a;var u=r.length;i=d(r);a=new f(u*3/4-i);n=i>0?u-4:u;var c=0;for(e=0;e<n;e+=4){t=o[r.charCodeAt(e)]<<18|o[r.charCodeAt(e+1)]<<12|o[r.charCodeAt(e+2)]<<6|o[r.charCodeAt(e+3)];a[c++]=t>>16&255;a[c++]=t>>8&255;a[c++]=t&255}if(i===2){t=o[r.charCodeAt(e)]<<2|o[r.charCodeAt(e+1)]>>4;a[c++]=t&255}else if(i===1){t=o[r.charCodeAt(e)]<<10|o[r.charCodeAt(e+1)]<<4|o[r.charCodeAt(e+2)]>>2;a[c++]=t>>8&255;a[c++]=t&255}return a}function l(r){return t[r>>18&63]+t[r>>12&63]+t[r>>6&63]+t[r&63]}function h(r,e,n){var t;var o=[];for(var f=e;f<n;f+=3){t=(r[f]<<16&16711680)+(r[f+1]<<8&65280)+(r[f+2]&255);o.push(l(t))}return o.join("")}function s(r){var e;var n=r.length;var o=n%3;var f="";var i=[];var a=16383;for(var u=0,d=n-o;u<d;u+=a){i.push(h(r,u,u+a>d?d:u+a))}if(o===1){e=r[n-1];f+=t[e>>2];f+=t[e<<4&63];f+="=="}else if(o===2){e=(r[n-2]<<8)+r[n-1];f+=t[e>>10];f+=t[e>>4&63];f+=t[e<<2&63];f+="="}i.push(f);return i.join("")}},{}]},{},[])("/")});
+
 class WS2S {
     constructor(ws2sServerAddress) {
         this.ws2sServerAddress = ws2sServerAddress
@@ -11,13 +20,18 @@ class WS2S {
 
         var socket = {
             onReady: () => {
+                // connection to ws2s server is open, 
+                // socket is ready to use, now you can call socket.connect() method
                 console.log('socket onReady')
             },
             onOpen: () => {
+                // socket.connect() is done, 
+                // socket is ready to for send data. now you can call socke.send() method
                 console.log('socket onOpen')
             },
-            onRecv: (data) => {
-                console.log('socket onRecv: ', data)
+            onRecv: (bytes) => {
+                // bytes is an Uint8Array
+                console.log('socket onRecv: ', bytes)
             },
             onClose: () => {
                 console.log('socket onClose')
@@ -25,6 +39,10 @@ class WS2S {
             onError: (error) => {
                 console.log('socket onError: ', error)
             },
+            /**
+             * @param host a string
+             * @param port an int
+             */
             connect: (host, port) => {
                 ws.send(JSON.stringify({
                     command: "connect",
@@ -32,10 +50,21 @@ class WS2S {
                     port: port
                 }))
             },
-            send: (data) => {
+            send: (string) => {
                 ws.send(JSON.stringify({
                     command: "send",
-                    data: data
+                    data: string
+                }))
+            },
+            /**
+             * send bytes by base64
+             * 
+             * @param bytes an Uint8Array
+             */
+            sendb: (bytes) => {
+                ws.send(JSON.stringify({
+                    command: "sendb",
+                    data: WS2SBase64.fromByteArray(bytes)
                 }))
             },
             close: () => {
@@ -55,15 +84,19 @@ class WS2S {
             socket.onError(error)
         }
         var receiving = false
-        var toReceive = []
+        var receivedBase64 = []
         ws.onmessage = (event) => {
             var response = JSON.parse(event.data)
             if (response.code < 0) {
-                toReceive.push(response.data)
+                receivedBase64.push(response.data)
                 if (!receiving) {
                     receiving = true
-                    while (toReceive.length > 0) {
-                        socket.onRecv(toReceive.shift())
+                    while (receivedBase64.length > 0) {
+                        socket.onRecv(
+                            WS2SBase64.toByteArray(
+                                receivedBase64.shift()
+                            )
+                        )
                     }
                     receiving = false
                 }
@@ -114,6 +147,7 @@ class WS2S {
 
                     complete: false,
                     isNullResult: false,
+                    isEmptyResult: false,
                     resultByteList: [],
                 }
                 if (oldStatusParents) {
@@ -134,11 +168,11 @@ class WS2S {
                         && this.status.rootType !== ':'
                         && this.status.rootType !== '$'
                         && this.status.rootType !== '*') {
-                    let x = byteList.shift()
-                    if (x === undefined || byteList.length === 0) {
+                    let byte = byteList.shift()
+                    if (byte === undefined || byteList.length === 0) {
                         return this.status
                     }
-                    this.status.rootType = String.fromCharCode(x)
+                    this.status.rootType = String.fromCharCode(byte)
                 }
 
                 if (this.status.rootType === '+' 
@@ -218,7 +252,11 @@ class WS2S {
                         this.status.complete = true
                         this.status.isNullResult = true
                     }
-                    if (this.status.arraySize > -1) {
+                    if (this.status.arraySize === 0) {
+                        this.status.complete = true
+                        this.status.isEmptyResult = true
+                    }
+                    if (this.status.arraySize > 0) {
                         while(this.status.arrayIndex < this.status.arraySize && byteList.length > 0) {
                             var itemHandler = new ResponseHandler(this.status.childrenStatus, this.status)
                             var itemStatus = itemHandler.push(byteList)
@@ -283,10 +321,14 @@ class WS2S {
                 redisClient.onReady()
             }
             socket.onRecv = (data) => {
-                var status = responseHandler.push(data)
+                var status = responseHandler.push(Array.from(data))
                 if (status.complete) {
                     if (status.isNullResult) {
                         redisClient.onError("a null object is recevied form redis server")
+                        return
+                    }
+                    if (status.isEmptyResult) {
+                        redisClient.onError("an empty result is recevied form redis server")
                         return
                     }
                     var parsedString = utf8Decoder.decode(new Uint8Array(status.resultByteList))
