@@ -44,7 +44,7 @@ OPCODE_PONG         = 0xA
 
 # -------------------------------- API ---------------------------------
 
-class API():
+class API(TCPServer):
 
     def run_forever(self):
         try:
@@ -84,7 +84,7 @@ class API():
 
 # ------------------------- Implementation -----------------------------
 
-class WebsocketServer(ThreadingMixIn, TCPServer, API):
+class WebsocketServer(ThreadingMixIn, API):
     """
 	A websocket server waiting for clients to connect.
 
@@ -185,7 +185,7 @@ class WebSocketHandler(StreamRequestHandler):
     def read_next_message(self):
         try:
             b1, b2 = self.read_bytes(2)
-        except ValueError as e:
+        except ValueError:
             b1, b2 = 0, 0
 
         fin    = b1 & FIN
@@ -285,7 +285,6 @@ class WebSocketHandler(StreamRequestHandler):
 
         else:
             raise Exception("Message is too big. Consider breaking it into chunks.")
-            return
 
         self.text_to_send.insert(0, header + payload)
         if not self.sendding_text: 
@@ -297,7 +296,7 @@ class WebSocketHandler(StreamRequestHandler):
     def handshake(self):
         try:
             message = self.request.recv(1024 * 16).decode().strip()
-        except Exception as e:
+        except Exception:
             self.keep_alive = False
             return
         upgrade = re.search('\nupgrade[\s]*:[\s]*websocket', message.lower())
