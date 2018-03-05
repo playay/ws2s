@@ -14,7 +14,10 @@ $('#send-button').bind("click",  () => {
 })
 
 $('#send-bytes-button').bind("click",  () => {
-    socket.sendb(new TextEncoder('utf8').encode('GET /xxx HTTP/1.1\r\nHost: feling.io\r\nConnection: close\r\n\r\n'))
+    socket.sendb(// send bytes by base64
+        new TextEncoder('utf8')
+            .encode('GET /xxx HTTP/1.1\r\nHost: feling.io\r\nConnection: close\r\n\r\n')
+    )
 })
 
 $('#close-button').bind("click",  () => {
@@ -31,11 +34,12 @@ socket.onOpen = () => {
     // socket is ready to for send data. now you can call socke.send() method
     console.log('onOpen')
 }
-socket.onRecv = (data) => {
-    console.log('onRecv', data)
+socket.onRecv = (bytes) => {
+    // bytes is an Uint8Array
+    console.log('socket onRecv: ', bytes)
 }
-socket.onClose = (reason) => {
-    console.log('onClose', reason)
+socket.onClose = () => {
+    console.log('onClose')
 }
 socket.onError = (error) => {
     console.log('onError', error)
@@ -48,8 +52,14 @@ redis_wrapper is provided based on the socket_wrapper.
 ```javaScript
 redis = new WS2S("wss://ws2s.feling.io/").newRedisCient("hostname", 6379) // (host, port, auth)
 
+redis.onReady = () => {
+    console.log('redisClient onReady')
+}
 redis.onResponse = (data) => {
     console.log(data)
+}
+redis.onError = (error) => {
+    console.log('redisClient onError: ', error)
 }
 
 $('#button').bind("click", () => {
