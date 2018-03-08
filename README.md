@@ -1,7 +1,7 @@
 ## ws2s--bring socket to browser-side js
 ws2s(websocket to socket) is a websocket server that handle socket(tcp)s.   
 
-![](https://playlay.github.io/images/ws2s.png)    
+![](https://playay.github.io/images/ws2s.png)    
 
 the simplest workflow might be like this:    
 
@@ -66,7 +66,7 @@ ws2s works on py2、py3、Linux、OSX. I tried to support Windows, but there is 
 
 It is recommended to install from github:    
 ```shell
-pip install git+https://github.com/playlay/ws2s --upgrade
+pip install git+https://github.com/playay/ws2s --upgrade
 ```
 
 you can also install ws2s from pypi:    
