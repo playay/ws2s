@@ -5,9 +5,9 @@ ws2s(websocket to socket) is a websocket server that handle socket(tcp)s.
 
 the simplest workflow might be like this:    
 
-first, a websocket client(we called **`"ws"`**) ask ws2s_server to create a socket(we called **`"s"`**) for it.    
-then, **`"ws"`** ask ws2s_server to use **`"s"`** to send data.    
-when **`"s"`** received data, ws2s_server will notify **`"ws"`** with the received data.    
+1. a websocket client(we called **`"ws"`**) ask ws2s_server to create a socket(we called **`"s"`**) for it.    
+2. **`"ws"`** ask ws2s_server to use **`"s"`** to send data.    
+3. when **`"s"`** received data, ws2s_server will notify **`"ws"`** with the received data.    
 
 with this workflow, javaScript running on a browser got the ability to use socket.    
 
