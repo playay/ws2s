@@ -11,6 +11,9 @@ the simplest workflow might be like this:
 
 with this workflow, javaScript running on a browser got the ability to use socket.    
 
+## TODO
++ start on boot (macOS)
++ ssh proxy
 
 ## client case
 + a ws2s server at `wss://ws2s.feling.io/` is ready for test case.     
@@ -82,7 +85,6 @@ after installed ws2s:
 
 ## config
 config file is store at `~/.ws2s/config.json`.    
-
 
 ## protocol
 ### request
