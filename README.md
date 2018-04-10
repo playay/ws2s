@@ -13,7 +13,7 @@ with this workflow, javaScript running on a browser got the ability to use socke
 
 ## TODO
 + start on boot (macOS)
-+ ssh proxy
++ ssh tunnel
 
 ## client case
 + a ws2s server at `wss://ws2s.feling.io/` is ready for test case.     
