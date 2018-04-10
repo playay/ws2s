@@ -1,8 +1,8 @@
 ## ws2s.js
-ws2s.js is a javaScript websocket client wrapper that provide socket-like interface to communicate with ws2s_server.    
+ws2s.js is a websocket client wrapper that provide socket-like interface to communicate with ws2s_server.    
 
 ### socket_wrapper
-```javaScript
+```js
 var socket = new WS2S("wss://ws2s.feling.io/").newSocket()
 
 $('#connect-button').bind("click", () => {
@@ -71,5 +71,5 @@ $('#button').bind("click", () => {
 })
 ```
    
-based on redis_wrapper, an online redis gui client is provided at [fredis](https://feling.io/redis/).    
+based on redis_wrapper, an online redis gui client is provided at [https://feling.io/redis/](https://feling.io/redis/).    
 
