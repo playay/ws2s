@@ -43,11 +43,20 @@ class WS2S {
              * @param host a string
              * @param port an int
              */
-            connect: (host, port) => {
+            connect: (host, port, 
+                ssh_host, ssh_port, 
+                ssh_username, ssh_password, 
+                ssh_private_key, ssh_private_key_password) => {
                 ws.send(JSON.stringify({
                     command: "connect",
                     host: host,
-                    port: port
+                    port: port,
+                    ssh_host: ssh_host,
+                    ssh_port: ssh_port,
+                    ssh_username: ssh_username,
+                    ssh_password: ssh_password,
+                    ssh_private_key: ssh_private_key,
+                    ssh_private_key_password: ssh_private_key_password
                 }))
             },
             send: (string) => {
@@ -120,7 +129,10 @@ class WS2S {
         return socket
     }
 
-    newRedisCient(host, port, auth) {
+    newRedisCient(host, port, auth,
+        ssh_host, ssh_port, 
+        ssh_username, ssh_password, 
+        ssh_private_key, ssh_private_key_password) {
         class ResponseHandler {
             constructor(oldStatus, oldStatusParents) {
                 this.init(oldStatus, oldStatusParents)
@@ -319,7 +331,10 @@ class WS2S {
             var socket = thisInstance.newSocket()
             socket.onReady = () => {
                 redisClient.onSocketReady()
-                socket.connect(host, port)
+                socket.connect(host, port,
+                    ssh_host, ssh_port, 
+                    ssh_username, ssh_password, 
+                    ssh_private_key, ssh_private_key_password)
             }
             socket.onOpen = () => {
                 if (auth) {

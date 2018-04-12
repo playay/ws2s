@@ -49,7 +49,14 @@ def message_received(client, server, message):
     if msg['command'] == 'connect':
         unregister_handlers_if_exists(client['id'])
         close_tcp_socket_if_exists(client['id'])
-        open_tcp_socket(client['id'], msg['host'], msg['port'])
+        open_tcp_socket(client['id'], msg['host'], msg['port'],
+            ssh_host = msg.get('ssh_host') if msg.get('ssh_host') else None, 
+            ssh_port = msg.get('ssh_port') if msg.get('ssh_port') else 22, 
+            ssh_username = msg.get('ssh_username') if msg.get('ssh_username') else None, 
+            ssh_password = msg.get('ssh_password') if msg.get('ssh_password') else None, 
+            ssh_private_key = msg.get('ssh_private_key') if msg.get('ssh_private_key') else None, 
+            ssh_private_key_password = msg.get('ssh_private_key_password') if msg.get('ssh_private_key_password') else None
+        )
         _register_handlers(client, server)
 
     if msg['command'] == 'send':

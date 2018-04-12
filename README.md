@@ -151,5 +151,8 @@ when "code" field > 0.
         but ws2s_server refused to do that     
     
     when "code" = 5:    
-        socket connection closed by socket server you connected to
+        socket connection closed by socket server you connected to    
+
+    when "code" = 6:    
+        failed to open ssh tunnel
 ```
