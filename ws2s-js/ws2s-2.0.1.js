@@ -300,6 +300,10 @@ class WS2S {
         var utf8Decoder = new TextDecoder('utf-8')
         var socketList = []
         var redisClient = {
+            reconnectCount: 0,
+            onSocketReady: () => {
+                console.log('redisClient onSocketReady')
+            },
             onReady: () => {
                 console.log('redisClient onReady')
             },
@@ -314,6 +318,7 @@ class WS2S {
         var initNewSocket = function (thisInstance) {
             var socket = thisInstance.newSocket()
             socket.onReady = () => {
+                redisClient.onSocketReady()
                 socket.connect(host, port)
             }
             socket.onOpen = () => {
@@ -349,8 +354,13 @@ class WS2S {
                 }
             }
             socket.onClose = () => {
-                responseHandler.init()
-                socketList[0] = initNewSocket(thisInstance)
+                if (redisClient.reconnectCount < 9) {
+                    responseHandler.init()
+                    socketList[0] = initNewSocket(thisInstance)
+                    redisClient.reconnectCount = redisClient.reconnectCount + 1
+                } else {
+                    redisClient.onError('connection loss, max reconnect times reached')
+                }
             }
             socket.onError = (error) => {
                 socketList[0].close()

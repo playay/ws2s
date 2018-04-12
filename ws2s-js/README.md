@@ -52,7 +52,14 @@ redis_wrapper is provided based on the socket_wrapper.
 ```javaScript
 redis = new WS2S("wss://ws2s.feling.io/").newRedisCient("hostname", 6379) // (host, port, auth)
 
+redis.onSocketReady: () => {
+    // connection to ws2s server is open, 
+    // socket is ready to use, now you can call socket.connect() method
+    console.log('redisClient onSocketReady')
+}
 redis.onReady = () => {
+    // socket.connect() method has been successfully executed, 
+    // redis.request('auth xxx') has been send, if need auth.
     console.log('redisClient onReady')
 }
 redis.onResponse = (data) => {
