@@ -11,9 +11,6 @@ the simplest workflow might be like this:
 
 with this workflow, javaScript running on a browser got the ability to use socket.    
 
-## TODO
-+ start on boot (macOS)
-+ ssh tunnel
 
 ## client case
 + a ws2s server at `wss://ws2s.feling.io/` is ready for test case.     
@@ -77,18 +74,18 @@ you can also install ws2s from pypi:
 pip install ws2s-python --upgrade
 ```
 
-
 after installed ws2s:     
 `ws2sd` command can be used in shell,     
 `~/.ws2s/` directory will be created when you exec `ws2sd`      
 
 
 ## config
-config file is store at `~/.ws2s/config.json`.    
+config file is store at `~/.ws2s/config.json`. modify it then exec `ws2sd restart`    
+
 
 ## protocol
 ### request
-all kinds of requests are listed below:     
+here are some examples of requests:     
 ```json
 {
     "command": "connect",
@@ -99,18 +96,12 @@ all kinds of requests are listed below:
     "command": "send",
     "data":"GET / HTTP/1.1\r\nHost: 127.0.0.1\r\nConnection: close\r\n\r\n"
 }
-{
-    "command": "sendb",
-    "data":"R0VUIC8gSFRUUC8xLjENCkhvc3Q6IDEyNy4wLjAuMQ0KQ29ubmVjdGlvbjogY2xvc2UNCg0K"
-}
-{
-    "command": "close"
-}
 ```
 you can find out that:    
 
-1. message(we called request) send to ws2s_sever is a json format string.   
-2. a "command" field is required    
+1. message(we called request) send to ws2s_sever is a json format string.    
+2. a `command` field is required. other fields are dependent on different `command`s    
+3. [this wiki](https://github.com/playay/ws2s/wiki/command) describes details of each command.    
 
 ### response
 message(we called response) received from ws2s_sever, is a json format string too:      
@@ -154,5 +145,5 @@ when "code" field > 0.
         socket connection closed by socket server you connected to    
 
     when "code" = 6:    
-        failed to open ssh tunnel
+        failed to open ssh tunnel    
 ```

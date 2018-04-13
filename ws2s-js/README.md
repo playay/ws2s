@@ -47,14 +47,16 @@ socket.onError = (error) => {
 ```
 
 ### redis_wrapper
-redis_wrapper is provided based on the socket_wrapper.
+redis_wrapper is provided based on the socket_wrapper.    
+
+
+based on redis_wrapper, an online redis gui client we called "fredis" is provided at [https://feling.io/redis/](https://feling.io/redis/).    
 
 ```javaScript
 redis = new WS2S("wss://ws2s.feling.io/").newRedisCient("hostname", 6379) // (host, port, auth)
 
 redis.onSocketReady: () => {
-    // connection to ws2s server is open, 
-    // socket is ready to use, now you can call socket.connect() method
+    // connection to ws2s server is open
     console.log('redisClient onSocketReady')
 }
 redis.onReady = () => {
@@ -77,6 +79,4 @@ $('#button').bind("click", () => {
     redis.request('ECHO "Hello World!"')
 })
 ```
-   
-based on redis_wrapper, an online redis gui client is provided at [https://feling.io/redis/](https://feling.io/redis/).    
 
