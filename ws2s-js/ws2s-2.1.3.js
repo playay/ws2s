@@ -340,7 +340,11 @@ class WS2S {
                 if (auth) {
                     redisClient.request("auth " + auth)
                 }
-                redisClient.onReady()
+                if (redisClient.reconnectCount > 0) {
+                    redisClient.onReconnected()
+                } else {
+                    redisClient.onReady()
+                }
             }
             socket.onRecv = (data) => {
                 let dataList = Array.from(data)
