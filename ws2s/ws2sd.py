@@ -129,7 +129,7 @@ def main():
                 + '    ws2s.log:    logs\n'
                 + '    pid:         do not modify this file!\n\n'
 
-                + 'more information: https://github.com/playlay/ws2s' + '\n'
+                + 'more information: https://github.com/playay/ws2s' + '\n'
                 )
 
 
