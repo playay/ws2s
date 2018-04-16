@@ -314,7 +314,8 @@ class WS2S {
         var redisClient = {
             reconnectCount: 0,
             onSocketReady: () => {
-                console.log('redisClient onSocketReady')
+            },
+            onReconnected: () => {
             },
             onReady: () => {
                 console.log('redisClient onReady')
