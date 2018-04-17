@@ -44,10 +44,11 @@ def run():
         level=logging.DEBUG,
         format='%(asctime)s %(levelname)s %(threadName)s %(filename)s:%(lineno)d %(message)s'
     )
-    logger.info('listen on %s:%s',
-                ws2s_config.get['listen']['host'],
-                ws2s_config.get['listen']['port']
-                )
+    logger.info('ws2s version: ' + ws2s.__version__)
+    logger.info('runing on python' + '.'.join(map(str, sys.version_info[0:3])))
+    logger.info('location: ' + os.path.dirname(__file__))
+    logger.info('listen on %s:%s', ws2s_config.get['listen']['host'], ws2s_config.get['listen']['port'])
+
     ws2s_server.new_instance(
         ws2s_config.get['listen']['port'],
         ws2s_config.get['listen']['host']
@@ -107,6 +108,9 @@ def main():
         return run()
 
     logging.config.fileConfig(os.path.dirname(__file__) + '/resources/logging.conf')
+    logger.info('ws2s version: ' + ws2s.__version__)
+    logger.info('runing on python' + '.'.join(map(str, sys.version_info[0:3])))
+    logger.info('location: ' + os.path.dirname(__file__) + '\n')
 
     if command == 'start':
         return start()
@@ -117,10 +121,7 @@ def main():
     if command == 'service':
         return set_start_on_boot()
 
-    logger.info('ws2s version: ' + ws2s.__version__ + ', '
-                + 'runing on python' + '.'.join(map(str, sys.version_info[0:3])) +'\n'
-                + 'location: ' + os.path.dirname(__file__) + '\n\n'
-                + 'commands:\n'
+    logger.info('commands:\n'
                 + '    ws2sd help:    show this info. alias for "ws2sd" \n'
                 + '    ws2sd run:     run ws2s server in front\n'
                 + '    ws2sd start:   start ws2s server in background\n'
