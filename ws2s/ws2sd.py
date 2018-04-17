@@ -117,9 +117,9 @@ def main():
     if command == 'service':
         return set_start_on_boot()
 
-    logger.info('ws2s version: ' + ws2s.__version__ + '\n'
-                + 'runing on python' + sys.version_info.major + '.' + sys.version_info.minor + '\n'
-                + 'ws2sd location: ' + os.path.dirname(__file__) + '\n'
+    logger.info('ws2s version: ' + ws2s.__version__ + ', '
+                + 'runing on python' + '.'.join(map(str, sys.version_info[0:3])) +'\n'
+                + 'location: ' + os.path.dirname(__file__) + '\n\n'
                 + 'commands:\n'
                 + '    ws2sd help:    show this info. alias for "ws2sd" \n'
                 + '    ws2sd run:     run ws2s server in front\n'
