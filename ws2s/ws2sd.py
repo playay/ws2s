@@ -6,6 +6,7 @@ import logging
 import logging.config
 from multiprocessing import cpu_count
 
+import ws2s
 from ws2s import ws2s_server
 from ws2s import ws2s_config
 
@@ -116,7 +117,10 @@ def main():
     if command == 'service':
         return set_start_on_boot()
 
-    logger.info('commands:\n'
+    logger.info('ws2s version: ' + ws2s.__version__ + '\n'
+                + 'runing on python' + sys.version_info.major + '.' + sys.version_info.minor + '\n'
+                + 'ws2sd location: ' + os.path.dirname(__file__) + '\n'
+                + 'commands:\n'
                 + '    ws2sd help:    show this info. alias for "ws2sd" \n'
                 + '    ws2sd run:     run ws2s server in front\n'
                 + '    ws2sd start:   start ws2s server in background\n'
