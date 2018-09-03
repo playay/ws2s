@@ -138,8 +138,8 @@ when "code" field > 0.
         {"command":"connect","host":"127.0.0.1","port":80}    
 
     when "code" = 4:    
-        usually means you want ws2s_server to connect 127.0.0.1,    
-        but ws2s_server refused to do that     
+        usually means you want ws2s_server to connect 127.0.0.1, but ws2s_server refused     
+        to do that. this feature is configurable in `~/.ws2s/config.json`    
     
     when "code" = 5:    
         socket connection closed by socket server you connected to    
