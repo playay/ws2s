@@ -62,7 +62,7 @@ socket.onRecv = (data) => {
 
 
 ## install
-ws2s works on py2、py3、Linux、OSX. I tried to support Windows, but there is too much adaptation to be handled for Windows.    
+ws2s works with py2、py3 on Linux、OSX. Windows users please try Windows Subsystem for Linux（WSL).    
 
 It is recommended to install from github:    
 ```shell
@@ -82,6 +82,8 @@ after installed ws2s:
 ## config
 config file is store at `~/.ws2s/config.json`. modify it then exec `ws2sd restart`    
 
+## start on boot
+at see [this wiki](https://github.com/playay/ws2s/wiki/start-on-boot)
 
 ## protocol
 ### request
