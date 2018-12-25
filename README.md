@@ -148,4 +148,20 @@ when "code" field > 0.
 
     when "code" = 6:    
         failed to open ssh tunnel    
+
+```
+
+
+### dev
+
+```
+pipenv shell
+
+
+
+
+
+python setup.py bdist_wheel
+python setup.py sdist
+twine upload  dist/*
 ```
