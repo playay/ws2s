@@ -1,6 +1,3 @@
-## TODO
-- send big data ( > 127K byte)
-
 ## ws2s--bring socket to browser-side js
 ws2s(websocket to socket) is a websocket server that handle socket(tcp)s.   
 
