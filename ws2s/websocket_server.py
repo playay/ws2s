@@ -118,10 +118,10 @@ class WebsocketServer(ThreadingMixIn, API):
         TCPServer.__init__(self, (host, port), WebSocketHandler)
 
     def _message_received_(self, handler, msg):
-        self.message_received(self.handler_to_client(handler), self, msg.decode())
+        self.message_received(self.handler_to_client(handler), self, msg.decode('utf8'))
 
     def _ping_received_(self, handler, msg):
-        handler.send_pong(msg.decode())
+        handler.send_pong(msg.decode('utf8'))
 
     def _pong_received_(self, handler, msg):
         pass
