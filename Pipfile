@@ -13,3 +13,5 @@ name = "pypi"
 
 gevent = "*"
 sshtunnel = "*"
+paramiko = ">=2.4.2"
+cryptography = ">=2.3"

@@ -62,7 +62,7 @@ socket.onRecv = (data) => {
 
 
 ## install
-ws2s works on py2、py3、Linux、OSX. I tried to support Windows, but there is too much adaptation to be handled for Windows.    
+ws2s works with py2、py3 on Linux、OSX. Windows users please try Windows Subsystem for Linux（WSL).    
 
 It is recommended to install from github:    
 ```shell
@@ -82,6 +82,8 @@ after installed ws2s:
 ## config
 config file is store at `~/.ws2s/config.json`. modify it then exec `ws2sd restart`    
 
+## start on boot
+at see [this wiki](https://github.com/playay/ws2s/wiki/start-on-boot)
 
 ## protocol
 ### request
@@ -138,12 +140,28 @@ when "code" field > 0.
         {"command":"connect","host":"127.0.0.1","port":80}    
 
     when "code" = 4:    
-        usually means you want ws2s_server to connect 127.0.0.1,    
-        but ws2s_server refused to do that     
+        usually means you want ws2s_server to connect 127.0.0.1, but ws2s_server refused     
+        to do that. this feature is configurable in `~/.ws2s/config.json`    
     
     when "code" = 5:    
         socket connection closed by socket server you connected to    
 
     when "code" = 6:    
         failed to open ssh tunnel    
+
+```
+
+
+### dev
+
+```
+pipenv shell
+
+
+
+
+
+python setup.py bdist_wheel
+python setup.py sdist
+twine upload  dist/*
 ```

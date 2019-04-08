@@ -6,6 +6,7 @@ import logging
 import logging.config
 from multiprocessing import cpu_count
 
+import ws2s
 from ws2s import ws2s_server
 from ws2s import ws2s_config
 
@@ -43,10 +44,11 @@ def run():
         level=logging.DEBUG,
         format='%(asctime)s %(levelname)s %(threadName)s %(filename)s:%(lineno)d %(message)s'
     )
-    logger.info('listen on %s:%s',
-                ws2s_config.get['listen']['host'],
-                ws2s_config.get['listen']['port']
-                )
+    logger.info('ws2s version: ' + ws2s.__version__)
+    logger.info('runing on python' + '.'.join(map(str, sys.version_info[0:3])))
+    logger.info('location: ' + os.path.dirname(__file__))
+    logger.info('listen on %s:%s', ws2s_config.get['listen']['host'], ws2s_config.get['listen']['port'])
+
     ws2s_server.new_instance(
         ws2s_config.get['listen']['port'],
         ws2s_config.get['listen']['host']
@@ -106,6 +108,9 @@ def main():
         return run()
 
     logging.config.fileConfig(os.path.dirname(__file__) + '/resources/logging.conf')
+    logger.info('ws2s version: ' + ws2s.__version__)
+    logger.info('runing on python' + '.'.join(map(str, sys.version_info[0:3])))
+    logger.info('location: ' + os.path.dirname(__file__) + '\n')
 
     if command == 'start':
         return start()
