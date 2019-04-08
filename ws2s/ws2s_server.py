@@ -10,6 +10,7 @@ from ws2s.websocket_server import WebsocketServer
 
 def controller_advice(message_received):
     def message_received_wrapper(client, server, message):
+        response_message = None
         try:
             logger.debug("received from client: {}, message: {}.".format(
                 client['address'], message))
