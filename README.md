@@ -1,3 +1,7 @@
+moved to https://gitee.com/apihub/ws2s
+
+
+
 ## ws2s--bring socket to browser-side js
 ws2s(websocket to socket) is a websocket server that handle socket(tcp)s.   
 
