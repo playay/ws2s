@@ -1,4 +1,4 @@
-moved to https://gitee.com/apihub/ws2s
+also see: https://gitee.com/apihub/ws2s
 
 
 
