@@ -5,7 +5,7 @@ also see: https://gitee.com/apihub/ws2s
 ## ws2s--bring socket to browser-side js
 ws2s(websocket to socket) is a websocket server that handle socket(tcp)s.   
 
-![](https://playay.github.io/images/ws2s.png)    
+![](https://playay.github.io/pages/images/ws2s.png)    
 
 the simplest workflow might be like this:    
 
