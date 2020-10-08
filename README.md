@@ -17,12 +17,12 @@ with this workflow, javaScript running on a browser got the ability to use socke
 
 
 ## client case
-+ a ws2s server at `wss://ws2s.feling.io/` is ready for test case.     
-+ an online redis gui client powered by ws2s is provided at [https://feling.io/redis/](https://feling.io/redis/).    
++ a ws2s server at `wss://ws2s.feling.net/` is ready for test case.     
++ an online redis gui client powered by ws2s is provided at [https://feling.net/redis/](https://feling.net/redis/).    
 
 ### use origin javaScript
 ```javaScript
-var ws = new WebSocket("wss://ws2s.feling.io/")
+var ws = new WebSocket("wss://ws2s.feling.net/")
 ws.onmessage = (event) => {
     console.log("onmessage: ", event.data)
 }
@@ -31,14 +31,14 @@ ws.onopen = () => {
     ws.send(JSON.stringify(
         {
             command: "connect",
-            host: "feling.io",
+            host: "feling.net",
             port: 80
         }
     ))
     ws.send(JSON.stringify(
         {
             command: "send",
-            data: "GET / HTTP/1.1\r\nHost: feling.io\r\nConnection: close\r\n\r\n"
+            data: "GET / HTTP/1.1\r\nHost: feling.net\r\nConnection: close\r\n\r\n"
         }
     ))
 }
@@ -49,14 +49,14 @@ ws.onclose = () => {
 
 ### use [ws2s.js](ws2s-js/)
 ```javaScript
-var socket = new WS2S("wss://ws2s.feling.io/").newSocket()
+var socket = new WS2S("wss://ws2s.feling.net/").newSocket()
 
 $('#connect-button').bind("click", () => {
-    socket.connect("feling.io", 80)
+    socket.connect("feling.net", 80)
 })
 
 $('#send-button').bind("click",  () => {
-    socket.send("GET / HTTP/1.1\r\nHost: feling.io\r\nConnection: close\r\n\r\n")
+    socket.send("GET / HTTP/1.1\r\nHost: feling.net\r\nConnection: close\r\n\r\n")
 })
 
 socket.onRecv = (data) => {
