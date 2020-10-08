@@ -3,20 +3,20 @@ ws2s.js is a websocket client wrapper that provide socket-like interface to comm
 
 ### socket_wrapper
 ```js
-var socket = new WS2S("wss://ws2s.feling.io/").newSocket()
+var socket = new WS2S("wss://ws2s.feling.net/").newSocket()
 
 $('#connect-button').bind("click", () => {
-    socket.connect("feling.io", 80)
+    socket.connect("feling.net", 80)
 })
 
 $('#send-button').bind("click",  () => {
-    socket.send("GET / HTTP/1.1\r\nHost: feling.io\r\nConnection: close\r\n\r\n")
+    socket.send("GET / HTTP/1.1\r\nHost: feling.net\r\nConnection: close\r\n\r\n")
 })
 
 $('#send-bytes-button').bind("click",  () => {
     socket.sendb(// send bytes by base64
         new TextEncoder('utf8')
-            .encode('GET /xxx HTTP/1.1\r\nHost: feling.io\r\nConnection: close\r\n\r\n')
+            .encode('GET /xxx HTTP/1.1\r\nHost: feling.net\r\nConnection: close\r\n\r\n')
     )
 })
 
@@ -50,10 +50,10 @@ socket.onError = (error) => {
 redis_wrapper is provided based on the socket_wrapper.    
 
 
-based on redis_wrapper, an online redis gui client we called "fredis" is provided at [https://feling.io/redis/](https://feling.io/redis/).    
+based on redis_wrapper, an online redis gui client we called "fredis" is provided at [https://feling.net/redis/](https://feling.net/redis/).    
 
 ```javaScript
-redis = new WS2S("wss://ws2s.feling.io/").newRedisCient("hostname", 6379) // (host, port, auth)
+redis = new WS2S("wss://ws2s.feling.net/").newRedisCient("hostname", 6379) // (host, port, auth)
 
 redis.onSocketReady: () => {
     // connection to ws2s server is open
